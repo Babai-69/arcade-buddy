@@ -28,16 +28,16 @@ export function UserProgressDashboard() {
     'Advanced': 4,
   };
   
-  const CAT_COLORS: Record<string, { bg: string, text: string }> = {
-    'AI': { bg: 'bg-purple-500/10 dark:bg-purple-500/20', text: 'text-purple-600 dark:text-purple-400' },
-    'Analytics': { bg: 'bg-blue-500/10 dark:bg-blue-500/20', text: 'text-blue-600 dark:text-blue-400' },
-    'Application Development': { bg: 'bg-teal-500/10 dark:bg-teal-500/20', text: 'text-teal-600 dark:text-teal-400' },
-    'Data': { bg: 'bg-orange-500/10 dark:bg-orange-500/20', text: 'text-orange-600 dark:text-orange-400' },
-    'DevOps': { bg: 'bg-pink-500/10 dark:bg-pink-500/20', text: 'text-pink-600 dark:text-pink-400' },
-    'Infrastructure': { bg: 'bg-slate-500/10 dark:bg-slate-500/20', text: 'text-slate-600 dark:text-slate-400' },
-    'Security': { bg: 'bg-red-500/10 dark:bg-red-500/20', text: 'text-red-600 dark:text-red-400' },
-    'Networking': { bg: 'bg-yellow-500/10 dark:bg-yellow-500/20', text: 'text-yellow-600 dark:text-yellow-400' },
-    'APIs': { bg: 'bg-green-500/10 dark:bg-green-500/20', text: 'text-green-600 dark:text-green-400' },
+  const CAT_COLORS: Record<string, { bg: string, text: string, dot: string }> = {
+    'AI': { bg: 'bg-purple-500/10 dark:bg-purple-500/20', text: 'text-purple-600 dark:text-purple-400', dot: 'bg-purple-600 dark:bg-purple-400' },
+    'Analytics': { bg: 'bg-blue-500/10 dark:bg-blue-500/20', text: 'text-blue-600 dark:text-blue-400', dot: 'bg-blue-600 dark:bg-blue-400' },
+    'Application Development': { bg: 'bg-teal-500/10 dark:bg-teal-500/20', text: 'text-teal-600 dark:text-teal-400', dot: 'bg-teal-600 dark:bg-teal-400' },
+    'Data': { bg: 'bg-orange-500/10 dark:bg-orange-500/20', text: 'text-orange-600 dark:text-orange-400', dot: 'bg-orange-600 dark:bg-orange-400' },
+    'DevOps': { bg: 'bg-pink-500/10 dark:bg-pink-500/20', text: 'text-pink-600 dark:text-pink-400', dot: 'bg-pink-600 dark:bg-pink-400' },
+    'Infrastructure': { bg: 'bg-slate-500/10 dark:bg-slate-500/20', text: 'text-slate-600 dark:text-slate-400', dot: 'bg-slate-600 dark:bg-slate-400' },
+    'Security': { bg: 'bg-red-500/10 dark:bg-red-500/20', text: 'text-red-600 dark:text-red-400', dot: 'bg-red-600 dark:bg-red-400' },
+    'Networking': { bg: 'bg-yellow-500/10 dark:bg-yellow-500/20', text: 'text-yellow-600 dark:text-yellow-400', dot: 'bg-yellow-600 dark:bg-yellow-400' },
+    'APIs': { bg: 'bg-green-500/10 dark:bg-green-500/20', text: 'text-green-600 dark:text-green-400', dot: 'bg-green-600 dark:bg-green-400' },
   };
 
   const DIFF_COLORS: Record<string, { bg: string, text: string }> = {
@@ -256,7 +256,7 @@ export function UserProgressDashboard() {
             </button>
 
             {categoryStats.map(stat => {
-              const colors = CAT_COLORS[stat.name] || { text: 'text-slate-500', bg: 'bg-slate-500' };
+              const colors = CAT_COLORS[stat.name] || { text: 'text-slate-500', bg: 'bg-slate-500', dot: 'bg-slate-500' };
               const isActive = categoryFilter === stat.name;
               return (
                 <button 
@@ -265,12 +265,12 @@ export function UserProgressDashboard() {
                   className={`px-4 py-2.5 flex items-center justify-between text-left text-xs transition-colors border-b border-slate-100/50 dark:border-slate-800/50 ${isActive ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}
                 >
                   <div className="font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2 w-1/2 truncate pr-2">
-                    <span className={`w-1.5 h-1.5 rounded-full ${colors.text.replace('text-', 'bg-')} shadow-sm`}></span>
+                    <span className={`w-1.5 h-1.5 rounded-full ${colors.dot} shadow-sm`}></span>
                     <span className="truncate">{stat.name}</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <div className="w-12 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden hidden sm:block">
-                      <div className={`h-full ${colors.text.replace('text-', 'bg-')}`} style={{ width: `${stat.percent}%` }}></div>
+                      <div className={`h-full ${colors.dot}`} style={{ width: `${stat.percent}%` }}></div>
                     </div>
                     <span className="text-[11px] text-slate-400 w-8 text-right">{stat.completed}/{stat.total}</span>
                     <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${colors.bg} ${colors.text}`}>{stat.percent}%</span>
