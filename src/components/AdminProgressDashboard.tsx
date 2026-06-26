@@ -15,7 +15,7 @@ export function AdminProgressDashboard() {
   useEffect(() => {
     // Check admin
     const checkAdmin = async () => {
-      if (!auth.currentUser || auth.currentUser.email !== 'deya58690@gmail.com') {
+      if (!auth.currentUser || (auth.currentUser.email !== 'deya58690@gmail.com' && auth.currentUser.email !== 'tripti.arcade.25@gmail.com')) {
         navigate('/');
         return;
       }

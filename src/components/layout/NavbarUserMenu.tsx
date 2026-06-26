@@ -78,7 +78,7 @@ export function NavbarUserMenu() {
     );
   }
 
-  const isAdmin = user.email === 'deya58690@gmail.com';
+  const isAdmin = user.email === 'deya58690@gmail.com' || user.email === 'tripti.arcade.25@gmail.com';
 
   return (
     <div className="relative" ref={dropdownRef}>
