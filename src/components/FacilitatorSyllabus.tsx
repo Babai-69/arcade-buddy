@@ -121,7 +121,7 @@ function AccordionSection({ title, isOpen, onToggle, children }: { title: React.
 }
 
 export function FacilitatorSyllabus() {
-  const [openSections, setOpenSections] = useState<string[]>(['beginner']);
+  const [openSections, setOpenSections] = useState<string[]>([]);
 
   const toggleSection = (section: string) => {
     setOpenSections(prev => 

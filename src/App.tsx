@@ -17,6 +17,7 @@ import { CodeOfConductPage } from './pages/CodeOfConductPage';
 import { ProgramTnCsPage } from './pages/ProgramTnCsPage';
 import { FaqPage } from './pages/FaqPage';
 import { AdminPanel } from './components/AdminPanel';
+import { ScrollToTop } from './components/ScrollToTop';
 import { mockParticipants } from './data/sampleData';
 import { Participant } from './types';
 
@@ -25,6 +26,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans transition-colors duration-300">
+      <ScrollToTop />
       <div className="mesh-bg"></div>
       <Navbar />
       
