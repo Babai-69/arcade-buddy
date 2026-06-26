@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, LogOut, ChartBar, Settings } from 'lucide-react';
-import { auth, loginWithGoogle, logout } from '../../lib/firebase';
+import { auth, loginWithGoogle, loginWithGoogleRedirect, logout } from '../../lib/firebase';
 import { ensureUserExists } from '../../lib/userProgressService';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, getRedirectResult } from 'firebase/auth';
 
 export function NavbarUserMenu() {
   const [user, setUser] = useState<any>(null);
@@ -12,6 +12,19 @@ export function NavbarUserMenu() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const checkRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result?.user) {
+          await ensureUserExists(result.user);
+          navigate('/my-progress');
+        }
+      } catch (error) {
+        console.error("Redirect login error:", error);
+      }
+    };
+    checkRedirect();
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
@@ -39,8 +52,10 @@ export function NavbarUserMenu() {
       if (error?.code !== 'auth/popup-closed-by-user' && error?.code !== 'auth/cancelled-popup-request') {
         console.error('Login error:', error);
       }
-      if (error?.code === 'auth/popup-blocked') {
-        alert('Login popup was blocked. Please allow popups for this site or open the app in a new tab to sign in.');
+      if (error?.code === 'auth/popup-blocked' || error?.code === 'auth/popup-closed-by-user' || error?.code === 'auth/cancelled-popup-request') {
+        // Fallback to redirect if popup fails
+        console.log('Falling back to redirect login...');
+        await loginWithGoogleRedirect();
       }
     }
   };

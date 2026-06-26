@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Papa from 'papaparse';
 import { collection, doc, writeBatch, onSnapshot, getDocs } from 'firebase/firestore';
-import { db, auth, loginWithGoogle, logout } from '../lib/firebase';
+import { db, auth, loginWithGoogle, loginWithGoogleRedirect, logout } from '../lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Search, ChevronUp, ChevronDown, Lock, Unlock, UploadCloud, FileText, Trash2 } from 'lucide-react';
 
@@ -260,6 +260,10 @@ export function TrueLeaderboardPage() {
                     } else if (e.code !== 'auth/cancelled-popup-request' && e.code !== 'auth/popup-closed-by-user') {
                       console.error("Login Error:", e);
                       setAuthError(e.message);
+                    }
+                    if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+                      console.log('Falling back to redirect login...');
+                      await loginWithGoogleRedirect();
                     }
                   }
                 }} 

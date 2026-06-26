@@ -8,6 +8,6 @@ export const auth = getAuth(app);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const googleProvider = new GoogleAuthProvider();
 
-export const loginWithGoogle = () => signInWithRedirect(auth, googleProvider);
-export const loginWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
+export const loginWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 export const logout = () => signOut(auth);
