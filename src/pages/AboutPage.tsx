@@ -13,7 +13,7 @@ export function AboutPage() {
             <ShieldAlert className="w-5 h-5 text-blue-500" /> Important Note
           </div>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-            Although this site offers details about The Arcade, please note that our <span className="text-blue-500 font-semibold cursor-pointer">Google Cloud Arcade Buddy</span> is an independent, unofficial tool and has no connection to or endorsement from Google. For accurate and official information about the Arcade program, including any support needs, please use the official resources listed above or reach out to Google Skills support directly via email: <a href="mailto:support-skills@google.com" className="text-blue-500 underline">support-skills@google.com</a>.
+            Although this site offers details about The Arcade, please note that our <a href="https://arcade-buddy.vercel.app" target="_blank" rel="noopener noreferrer" className="text-blue-500 font-semibold hover:underline cursor-pointer">Google Cloud Arcade Buddy</a> is an independent, unofficial tool and has no connection to or endorsement from Google. For accurate and official information about the Arcade program, including any support needs, please use the official resources listed above or reach out to Google Skills support directly via email: <a href="mailto:support-skills@google.com" className="text-blue-500 underline">support-skills@google.com</a>.
           </p>
         </div>
 
