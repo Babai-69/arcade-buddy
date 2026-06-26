@@ -15,6 +15,7 @@ import { PrivacyPage } from './pages/PrivacyPage';
 import { TermsPage } from './pages/TermsPage';
 import { CodeOfConductPage } from './pages/CodeOfConductPage';
 import { ProgramTnCsPage } from './pages/ProgramTnCsPage';
+import { FaqPage } from './pages/FaqPage';
 import { AdminPanel } from './components/AdminPanel';
 import { mockParticipants } from './data/sampleData';
 import { Participant } from './types';
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/public-profile-help" element={<PublicProfileHelpPage />} />
           <Route path="/swags" element={<SwagsPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/code-of-conduct" element={<CodeOfConductPage />} />

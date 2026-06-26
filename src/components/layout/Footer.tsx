@@ -19,11 +19,11 @@ export function Footer() {
           <div>
             <h4 className="font-bold mb-4 font-display">Quick Links</h4>
             <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-              <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/home" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#4285F4]"><BookOpen className="w-4 h-4 text-[#4285F4]"/> About Program</a></li>
-              <li><a href="/leaderboard" className="flex items-center gap-2 hover:text-[#4285F4]"><Star className="w-4 h-4 text-[#FBBC04]"/> Leaderboard</a></li>
-              <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/syllabus" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#4285F4]"><BookOpen className="w-4 h-4 text-[#34A853]"/> Syllabus</a></li>
-              <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/points-system" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#4285F4]"><Star className="w-4 h-4 text-[#EA4335]"/> Points System</a></li>
-              <li><a href="https://rsvp.withgoogle.com/events/arcade-facilitator/faqs" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#4285F4]"><HelpCircle className="w-4 h-4 text-[#4285F4]"/> FAQs</a></li>
+              <li><Link to="/facilitator" className="flex items-center gap-2 hover:text-[#4285F4]"><BookOpen className="w-4 h-4 text-[#4285F4]"/> About Program</Link></li>
+              <li><Link to="/leaderboard" className="flex items-center gap-2 hover:text-[#4285F4]"><Star className="w-4 h-4 text-[#FBBC04]"/> Leaderboard</Link></li>
+              <li><Link to="/syllabus" className="flex items-center gap-2 hover:text-[#4285F4]"><BookOpen className="w-4 h-4 text-[#34A853]"/> Syllabus</Link></li>
+              <li><a href="/facilitator#point-system" className="flex items-center gap-2 hover:text-[#4285F4]"><Star className="w-4 h-4 text-[#EA4335]"/> Points System</a></li>
+              <li><Link to="/faq" className="flex items-center gap-2 hover:text-[#4285F4]"><HelpCircle className="w-4 h-4 text-[#4285F4]"/> FAQs</Link></li>
               <li><a href="https://go.cloudskillsboost.google/arcade" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#4285F4]"><Gamepad2 className="w-4 h-4 text-[#34A853]"/> Official Arcade</a></li>
               <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#4285F4]"><Shield className="w-4 h-4 text-[#EA4335]"/> Privacy Policy</a></li>
             </ul>

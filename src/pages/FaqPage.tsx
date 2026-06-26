@@ -126,7 +126,7 @@ const faqsCol2 = [
   }
 ];
 
-export function FacilitatorFAQ() {
+export function FaqPage() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   const toggle = (id: string) => {
@@ -168,7 +168,7 @@ export function FacilitatorFAQ() {
   );
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-20 mb-20 px-4">
+    <div className="w-full max-w-7xl mx-auto pt-24 pb-20 px-4">
       <div className="bg-white/60 dark:bg-slate-900/40 backdrop-blur-md rounded-3xl p-8 mb-4 border border-slate-200/50 dark:border-slate-800/50 shadow-xl">
         <div className="flex items-center gap-3 mb-2">
           <HelpCircle className="w-6 h-6 text-[#8b5cf6]" />

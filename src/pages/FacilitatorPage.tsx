@@ -1,6 +1,5 @@
 import React from 'react';
 import { FacilitatorBonus } from '../components/FacilitatorBonus';
-import { FacilitatorFAQ } from '../components/FacilitatorFAQ';
 import { FacilitatorDetails } from '../components/FacilitatorDetails';
 import { FacilitatorWhy } from '../components/FacilitatorWhy';
 
@@ -11,7 +10,6 @@ export function FacilitatorPage() {
       <FacilitatorWhy />
       <div className="w-full max-w-7xl mx-auto h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-800 to-transparent my-10" />
       <FacilitatorBonus />
-      <FacilitatorFAQ />
     </div>
   );
 }
