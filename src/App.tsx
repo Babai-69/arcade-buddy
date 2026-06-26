@@ -16,6 +16,8 @@ import { TermsPage } from './pages/TermsPage';
 import { CodeOfConductPage } from './pages/CodeOfConductPage';
 import { ProgramTnCsPage } from './pages/ProgramTnCsPage';
 import { FaqPage } from './pages/FaqPage';
+import { MyProgressPage } from './pages/MyProgressPage';
+import { AdminProgressPage } from './pages/AdminProgressPage';
 import { AdminPanel } from './components/AdminPanel';
 import { ScrollToTop } from './components/ScrollToTop';
 import { mockParticipants } from './data/sampleData';
@@ -41,6 +43,8 @@ export default function App() {
           <Route path="/public-profile-help" element={<PublicProfileHelpPage />} />
           <Route path="/swags" element={<SwagsPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/my-progress" element={<MyProgressPage />} />
+          <Route path="/admin-progress" element={<AdminProgressPage />} />
           <Route path="/faq" element={<FaqPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />

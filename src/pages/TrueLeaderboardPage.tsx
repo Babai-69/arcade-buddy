@@ -236,7 +236,7 @@ export function TrueLeaderboardPage() {
             🏆 Program Leaderboard
           </h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
-            Live rankings. No login required for students.
+            Live rankings. Check You Position now
           </p>
         </div>
         <div className="mt-4 md:mt-0 flex flex-col items-end relative">

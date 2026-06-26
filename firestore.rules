@@ -1,10 +1,39 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Everyone can read
-    match /leaderboard/{document=**} {
+
+    // Leaderboard — public read, admin write only
+    match /leaderboard/{doc=**} {
       allow read: if true;
-      allow write: if request.auth != null && (request.auth.token.email == "deya58690@gmail.com" || request.auth.token.email == "tripti.arcade.25@gmail.com");
+      allow write: if request.auth != null
+        && (request.auth.token.email == "deya58690@gmail.com" || request.auth.token.email == "tripti.arcade.25@gmail.com");
+    }
+
+    // Users — each user reads/writes only their own
+    match /users/{uid} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == uid;
+      
+      // Admin can read all users
+      allow read: if request.auth != null
+        && request.auth.token.email == "deya58690@gmail.com";
+
+      // Badge sub-collection
+      match /badges/{badgeId} {
+        allow read, write: if request.auth != null
+          && request.auth.uid == uid;
+        
+        // Admin can read all badges
+        allow read: if request.auth != null
+          && request.auth.token.email == "deya58690@gmail.com";
+      }
+    }
+
+    // Config — public read
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.token.email == "deya58690@gmail.com";
     }
   }
 }

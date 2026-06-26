@@ -3,6 +3,8 @@ import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import logoImage from '../../assets/images/regenerated_image_1782145505916.png';
 
+import { NavbarUserMenu } from './NavbarUserMenu';
+
 export function Navbar() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -52,8 +54,10 @@ export function Navbar() {
             <Link to="/dashboard#calculator" className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2 rounded-full font-bold transition-all shadow-md">
               Calculator
             </Link>
+            <NavbarUserMenu />
           </div>
           <div className="md:hidden flex items-center gap-4">
+            <NavbarUserMenu />
             <button 
               className="p-2 text-slate-800 dark:text-white"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
