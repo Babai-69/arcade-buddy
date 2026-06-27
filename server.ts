@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from "express";
 import path from "path";
 import * as cheerio from "cheerio";
@@ -28,37 +31,38 @@ async function startServer() {
       }
 
       const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: parseInt(process.env.SMTP_PORT || '587'),
+        secure: false,         // MUST be false for port 587
         auth: {
           user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS?.replace(/\s+/g, ''),
+          pass: process.env.SMTP_PASS,  // App Password here
+        },
+        tls: {
+          rejectUnauthorized: false     // prevents TLS errors
         }
       });
 
-      const attachmentLinks = attachments && attachments.length > 0 
-        ? attachments.map((a: any) => a.filename).join(', ')
-        : 'None';
-
       const mailOptions = {
-        from: `"Support Form" <${process.env.SMTP_USER}>`,
-        to: "pablo.incharge.boss@gmail.com",
-        replyTo: email,
-        subject: `[Support] ${queryType} - ${name}`,
-        text: `New Support Request
-
-Name: ${name}
-Email: ${email}
-Profile URL: ${profileUrl}
-Query Type: ${queryType}
-
-Message:
-${message}
-
-Attachments (Attached):
-${attachmentLinks}
-`,
+        from: `"Arcade Buddy Contact" <${process.env.SMTP_USER}>`,
+        to: process.env.SMTP_USER,  // sends to yourself
+        replyTo: email,          // user's email for easy reply
+        subject: `New Query from ${name} — Arcade Buddy`,
+        html: `
+          <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+            <h2 style="color:#4285F4">New Contact Form Submission</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Message:</strong></p>
+            <div style="background:#f5f5f5;padding:16px;border-radius:8px">
+              ${message}
+            </div>
+            <hr/>
+            <p style="color:#999;font-size:12px">
+              Sent from Arcade Buddy contact form
+            </p>
+          </div>
+        `,
         attachments: attachments && attachments.length > 0 
           ? attachments.map((a: any) => ({
               filename: a.filename,
@@ -68,11 +72,31 @@ ${attachmentLinks}
           : []
       };
 
-      await transporter.sendMail(mailOptions);
-      res.json({ success: true });
+      try {
+        await transporter.verify();
+        await transporter.sendMail(mailOptions);
+        return res.json({ 
+          success: true, 
+          message: 'Query saved and email sent!' 
+        });
+      } catch (emailErr: any) {
+        console.error('Email error:', emailErr.message);
+        
+        // Still return success for the saved query
+        // but with a specific email error message
+        return res.json({
+          success: true,
+          emailSent: false,
+          message: emailErr.message.includes('Invalid login')
+            ? 'Query saved! Email failed — invalid Gmail App Password.'
+            : emailErr.message.includes('ECONNREFUSED') 
+            ? 'Query saved! Email failed — cannot connect to Gmail SMTP.'
+            : 'Query saved! Email notification failed: ' + emailErr.message
+        });
+      }
     } catch (error) {
-      console.error("Failed to send email:", error);
-      res.status(500).json({ error: "Failed to send email notification" });
+      console.error("Failed to process request:", error);
+      res.status(500).json({ error: "Failed to process request" });
     }
   });
 
