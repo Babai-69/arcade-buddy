@@ -18,6 +18,7 @@ import { ProgramTnCsPage } from './pages/ProgramTnCsPage';
 import { FaqPage } from './pages/FaqPage';
 import { MyProgressPage } from './pages/MyProgressPage';
 import { AdminProgressPage } from './pages/AdminProgressPage';
+import { SupportPage } from './pages/SupportPage';
 import { AdminPanel } from './components/AdminPanel';
 import { ScrollToTop } from './components/ScrollToTop';
 import { mockParticipants } from './data/sampleData';
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/code-of-conduct" element={<CodeOfConductPage />} />
           <Route path="/program-tncs" element={<ProgramTnCsPage />} />
+          <Route path="/support" element={<SupportPage />} />
         </Routes>
         
         {/* Hidden Admin Route using hash for easy access by the creator */}
