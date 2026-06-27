@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { UserBadgeProgress, getUserProgress, updateBadgeStatus } from '../lib/userProgressService';
-import { Search, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, CheckCircle, ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import { auth } from '../lib/firebase';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export function UserProgressDashboard() {
   const [badges, setBadges] = useState<UserBadgeProgress[]>([]);
@@ -119,6 +121,49 @@ export function UserProgressDashboard() {
     }
   };
 
+  const downloadPDF = () => {
+    if (!auth.currentUser) return;
+    
+    const doc = new jsPDF();
+    const studentName = auth.currentUser.displayName || 'Student';
+    const dateStr = new Date().toLocaleDateString();
+    
+    doc.setFontSize(20);
+    doc.text('Google Cloud Arcade Progress Report', 14, 22);
+    
+    doc.setFontSize(12);
+    doc.text(`Student: ${studentName}`, 14, 32);
+    doc.text(`Email: ${auth.currentUser.email}`, 14, 38);
+    doc.text(`Date: ${dateStr}`, 14, 44);
+
+    const completedCount = badges.filter(b => b.status === 'Completed').length;
+    const totalBadges = badges.length;
+    const completionPercent = totalBadges === 0 ? 0 : Math.round((completedCount / totalBadges) * 100);
+
+    doc.text(`Total Badges Completed: ${completedCount} / ${totalBadges}`, 14, 54);
+    doc.text(`Completion Percentage: ${completionPercent}%`, 14, 60);
+
+    const tableData = badges
+      .filter(b => b.status === 'Completed' || b.status === 'In Progress')
+      .map((b, i) => [
+        (i + 1).toString(),
+        b.badgeName,
+        b.category,
+        b.status,
+        b.completionDate || '-'
+      ]);
+
+    autoTable(doc, {
+      startY: 68,
+      head: [['#', 'Badge Name', 'Category', 'Status', 'Completed Date']],
+      body: tableData,
+      theme: 'grid',
+      headStyles: { fillColor: [59, 130, 246] }
+    });
+
+    doc.save(`Arcade_Progress_${studentName.replace(/\s+/g, '_')}.pdf`);
+  };
+
   if (loading) {
     return <div className="p-12 text-center text-slate-500">Loading your progress...</div>;
   }
@@ -180,17 +225,26 @@ export function UserProgressDashboard() {
 
   return (
     <div className="w-full max-w-7xl mx-auto pt-8 pb-20 px-4 font-sans">
-      <div className="mb-6">
-        <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-1.5 text-sm text-blue-600 dark:text-blue-400 font-semibold mb-4">
-          <span className="w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-             <img src={auth.currentUser.photoURL || `https://ui-avatars.com/api/?name=${auth.currentUser.email}`} alt="" className="w-full h-full object-cover" />
-          </span>
-          {auth.currentUser.displayName || 'Student'} · {auth.currentUser.email}
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 rounded-full px-4 py-1.5 text-sm text-blue-600 dark:text-blue-400 font-semibold mb-4">
+            <span className="w-4 h-4 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+               <img src={auth.currentUser.photoURL || `https://ui-avatars.com/api/?name=${auth.currentUser.email}`} alt="" className="w-full h-full object-cover" />
+            </span>
+            {auth.currentUser.displayName || 'Student'} · {auth.currentUser.email}
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
+            My Skill Badge Progress
+          </h1>
+          <p className="text-sm text-slate-500">Track your Google Cloud Arcade skill badges.  Only you can see this.</p>
         </div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
-          My Skill Badge Progress
-        </h1>
-        <p className="text-sm text-slate-500">Track your Google Cloud Arcade skill badges.  Only you can see this.</p>
+        <button 
+          onClick={downloadPDF}
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors shadow-sm whitespace-nowrap"
+        >
+          <Download className="w-4 h-4" />
+          Download Progress Report
+        </button>
       </div>
 
       {/* Summary Cards */}

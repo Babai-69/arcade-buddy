@@ -259,7 +259,7 @@ export function SupportPage() {
               <h4 className="text-xl font-semibold text-emerald-50">Response Time</h4>
             </div>
             <p className="text-base text-emerald-100/90 leading-relaxed max-w-3xl mx-auto">
-              We strive to respond to all queries within 24-48 hours. For urgent matters, please reach out through our <a href="#" className="text-emerald-400 hover:text-emerald-300 underline font-medium underline-offset-2">Telegram community</a> or <a href="https://chat.whatsapp.com/JRvoPJxMibzLPnqWcASG0I" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 underline font-medium underline-offset-2">WhatsApp group</a> for faster assistance.
+              We strive to respond to all queries within 24-48 hours. For urgent matters, please reach out through our <a href="https://t.me/arcadebuddy" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 underline font-medium underline-offset-2">Telegram community</a> or <a href="https://chat.whatsapp.com/JRvoPJxMibzLPnqWcASG0I" target="_blank" rel="noopener noreferrer" className="text-emerald-400 hover:text-emerald-300 underline font-medium underline-offset-2">WhatsApp group</a> for faster assistance.
             </p>
           </div>
 

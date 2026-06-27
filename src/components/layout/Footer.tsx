@@ -33,7 +33,7 @@ export function Footer() {
             <h4 className="font-bold mb-4 font-display">Community</h4>
             <ul className="space-y-3">
               <li>
-                <a href="https://t.me/Babai_bro" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-[#4285F4] transition-colors">
+                <a href="https://t.me/arcadebuddy" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 hover:text-[#4285F4] transition-colors">
                   <Send className="h-4 w-4 text-[#4285F4]" /> Telegram Group
                 </a>
               </li>

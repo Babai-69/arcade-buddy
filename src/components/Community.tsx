@@ -14,7 +14,7 @@ export function Community() {
 
         <div className="flex flex-col sm:flex-row justify-center gap-6">
           <a
-            href="#"
+            href="https://t.me/arcadebuddy"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-4 bg-[#4285F4] hover:bg-blue-600 transition-colors px-6 py-4 rounded-xl shadow-lg flex-1 sm:max-w-[280px]"
