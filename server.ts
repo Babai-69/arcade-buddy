@@ -26,6 +26,10 @@ async function startServer() {
     res.json({ status: "ok" });
   });
 
+  app.options("/api/notify-query", (req, res) => {
+    res.sendStatus(200);
+  });
+
   app.post("/api/notify-query", async (req, res) => {
     try {
       const { name, email, profileUrl, queryType, message, attachments } = req.body;
