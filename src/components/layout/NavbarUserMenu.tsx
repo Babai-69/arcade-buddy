@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, LogOut, ChartBar, Settings } from 'lucide-react';
+import { User, LogOut, ChartBar, Settings, Upload } from 'lucide-react';
 import { auth, loginWithGoogle, loginWithGoogleRedirect, logout } from '../../lib/firebase';
 import { ensureUserExists } from '../../lib/userProgressService';
 import { onAuthStateChanged, getRedirectResult } from 'firebase/auth';
@@ -17,7 +17,6 @@ export function NavbarUserMenu() {
         const result = await getRedirectResult(auth);
         if (result?.user) {
           await ensureUserExists(result.user);
-          navigate('/my-progress');
         }
       } catch (error) {
         console.error("Redirect login error:", error);
@@ -47,7 +46,6 @@ export function NavbarUserMenu() {
   const handleLogin = async () => {
     try {
       await loginWithGoogle();
-      navigate('/my-progress');
     } catch (error: any) {
       if (error?.code !== 'auth/popup-closed-by-user' && error?.code !== 'auth/cancelled-popup-request') {
         console.error('Login error:', error);
@@ -82,18 +80,93 @@ export function NavbarUserMenu() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button 
+      <div
+        style={{
+          position: 'relative',
+          width: '36px',
+          height: '36px',
+          cursor: 'pointer',
+          flexShrink: 0
+        }}
         onClick={() => setIsOpen(!isOpen)}
-        className="relative rounded-full focus:outline-none ring-2 ring-transparent hover:ring-blue-400 transition-all"
+        title={user?.displayName || user?.email || 'Profile'}
       >
-        <img 
-          src={user.photoURL || `https://ui-avatars.com/api/?name=${user.email}`} 
-          alt="User Profile" 
-          className="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 object-cover"
-        />
-        {/* Online Indicator */}
-        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
-      </button>
+        {/* Rotating glow ring */}
+        <div style={{
+          position: 'absolute',
+          inset: '-2px',
+          borderRadius: '50%',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            width: '200%',
+            height: '200%',
+            top: '-50%',
+            left: '-50%',
+            background: 'conic-gradient(#4285F4,#34A853,#FBBC05,#EA4335,#7c3aed,#4285F4)',
+            animation: 'spinCW 8s linear infinite'
+          }}/>
+        </div>
+
+        {/* Dark gap between ring and photo */}
+        <div style={{
+          position: 'absolute',
+          inset: '2px',
+          borderRadius: '50%',
+          background: '#0f1117',
+          zIndex: 1
+        }}/>
+
+        {/* User photo OR initials fallback */}
+        {user?.photoURL ? (
+          <img
+            src={user.photoURL}
+            alt={user.displayName || 'User'}
+            style={{
+              position: 'absolute',
+              inset: '2px',
+              width: 'calc(100% - 4px)',
+              height: 'calc(100% - 4px)',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              zIndex: 2
+            }}
+          />
+        ) : (
+          <div style={{
+            position: 'absolute',
+            inset: '2px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #4285F4, #34A853)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '12px',
+            fontWeight: 500,
+            color: '#fff',
+            zIndex: 2
+          }}>
+            {user?.displayName?.charAt(0).toUpperCase() 
+             || user?.email?.charAt(0).toUpperCase() 
+             || 'A'}
+          </div>
+        )}
+
+        {/* Green online dot */}
+        <span style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: '9px',
+          height: '9px',
+          borderRadius: '50%',
+          background: '#34A853',
+          border: '2px solid #0f1117',
+          zIndex: 3,
+          animation: 'pulse 2.5s ease-in-out infinite'
+        }}/>
+      </div>
 
       {isOpen && (
         <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl py-2 z-50">
@@ -117,16 +190,28 @@ export function NavbarUserMenu() {
             </button>
             
             {isAdmin && (
-              <button
-                onClick={() => {
-                  setIsOpen(false);
-                  navigate('/admin-progress');
-                }}
-                className="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors"
-              >
-                <Settings className="w-4 h-4 text-purple-500" />
-                Admin: All Students
-              </button>
+              <>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate('/admin-progress');
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors"
+                >
+                  <Settings className="w-4 h-4 text-purple-500" />
+                  Admin: All Students
+                </button>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate('/leaderboard');
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-3 transition-colors"
+                >
+                  <Upload className="w-4 h-4 text-green-500" />
+                  Upload CSV
+                </button>
+              </>
             )}
           </div>
           

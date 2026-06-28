@@ -226,55 +226,29 @@ export function TrueLeaderboardPage() {
   const statPoints = Math.round(data.reduce((s, r) => s + r.points, 0) * 10) / 10;
   const statMilestone = data.filter(r => r.milestone !== 'None').length;
 
+  const top3 = useMemo(() => {
+    return [...data].sort((a, b) => b.points - a.points).slice(0, 3);
+  }, [data]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 min-h-screen">
       
-      {/* HEADER WITH ADMIN TOGGLE */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 pb-4 border-b border-slate-200 dark:border-slate-800">
-        <div>
-          <h1 className="text-3xl font-bold font-display text-slate-900 dark:text-white flex items-center gap-2">
-            🏆 Program Leaderboard
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
-            Live rankings. Check You Position now
-          </p>
-        </div>
-        <div className="mt-4 md:mt-0 flex flex-col items-end relative">
-          {user ? (
-             <div className="flex items-center gap-3">
-               <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Signed in as {user.email}</span>
-               <button onClick={logout} className="text-sm bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-1 font-semibold transition-colors">
-                 Logout
-               </button>
-             </div>
-          ) : (
-            <>
-              <button 
-                onClick={async () => {
-                  try {
-                    setAuthError('');
-                    await loginWithGoogle();
-                  } catch (e: any) {
-                    if (e.code === 'auth/unauthorized-domain') {
-                      setAuthError('This domain is not authorized. Please add this preview URL or Vercel URL to your Firebase Console > Authentication > Settings > Authorized domains.');
-                    } else if (e.code !== 'auth/cancelled-popup-request' && e.code !== 'auth/popup-closed-by-user') {
-                      console.error("Login Error:", e);
-                      setAuthError(e.message);
-                    }
-                    if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
-                      console.log('Falling back to redirect login...');
-                      await loginWithGoogleRedirect();
-                    }
-                  }
-                }} 
-                className="text-xs bg-slate-100 dark:bg-slate-800/50 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center gap-1 transition-colors"
-              >
-                 <Lock className="w-3 h-3" /> Admin Login
-               </button>
-               {authError && <div className="absolute top-12 right-0 mt-2 bg-red-100 text-red-700 text-xs p-3 rounded-lg w-64 shadow-lg border border-red-200 z-50">⚠️ {authError}</div>}
-            </>
-          )}
-        </div>
+      {/* HEADER BANNER */}
+      <div className="bg-slate-100 dark:bg-[#0b2144] rounded-2xl p-8 mb-10 text-slate-900 dark:text-white max-w-4xl mx-auto shadow-sm border border-slate-200 dark:border-[#1e3a6a] text-center">
+         <h2 className="text-3xl md:text-4xl font-bold font-display flex items-center justify-center gap-3 mb-4 text-slate-900 dark:text-white">
+           🏆 Arcade Leaderboard 🏆
+         </h2>
+         <p className="text-slate-700 dark:text-slate-200 text-lg mb-4 max-w-2xl mx-auto font-medium">
+           Climb the ranks, earn exclusive rewards, and secure your spot among the top achievers!
+         </p>
+         <p className="text-[#e29302] dark:text-[#FBBC05] font-semibold text-lg mb-8">
+           ✨ Top achievers can earn exclusive vouchers from the Arcade Team. ✨
+         </p>
+         
+         <div className="bg-white dark:bg-[#4d5e75] border border-slate-200 dark:border-white/20 rounded-xl p-6 shadow-sm">
+           <h3 className="text-[#e29302] dark:text-[#FBBC05] font-bold text-xl md:text-2xl mb-2">Want to win exclusive rewards?</h3>
+           <p className="text-slate-800 dark:text-white font-medium">Keep earning points and climb the leaderboard to receive Arcade-exclusive rewards!</p>
+         </div>
       </div>
 
       {isAdmin && (
@@ -327,6 +301,18 @@ export function TrueLeaderboardPage() {
                {uploadStatus}
              </div>
            )}
+        </div>
+      )}
+
+      {/* TOP 3 LEADERBOARD */}
+      {data.length >= 3 && !isLoading && (
+        <div className="mb-12 mt-4 text-center">
+          
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6 max-w-4xl mx-auto">
+            {top3[1] && <TopCard participant={top3[1]} rank={2} />}
+            {top3[0] && <TopCard participant={top3[0]} rank={1} />}
+            {top3[2] && <TopCard participant={top3[2]} rank={3} />}
+          </div>
         </div>
       )}
 
@@ -479,4 +465,42 @@ function TierPill({ tier }: { tier: string }) {
   else if (tier === 'Trooper') clr = "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300";
   else clr = "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400";
   return <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap ${clr}`}>{tier}</span>;
+}
+
+function TopCard({ participant, rank }: { participant: any; rank: number }) {
+  const isFirst = rank === 1;
+  const isSecond = rank === 2;
+  
+  const bgClass = isFirst 
+    ? 'bg-[#F8E2AC] border-[#E8D490]' // Gold
+    : isSecond
+      ? 'bg-[#D1D4DA] border-[#BFC3CA]' // Silver
+      : 'bg-[#E3C2A4] border-[#D6A982]'; // Bronze
+      
+  const rankColor = isFirst ? 'text-[#DCA821]' : isSecond ? 'text-[#7B8394]' : 'text-[#CE7424]';
+  const avatarBgColor = isFirst ? 'E91E63' : isSecond ? '111111' : '607D8B';
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(participant.name)}&background=${avatarBgColor}&color=fff&size=128`;
+  
+  const sizeClass = isFirst ? 'w-[280px] h-[220px]' : 'w-[260px] h-[200px]';
+
+  return (
+    <div className={`relative rounded-xl flex flex-col items-center justify-center p-6 border shadow-sm ${bgClass} ${sizeClass} mx-auto md:mx-0`}>
+      <div className={`absolute top-4 right-4 w-7 h-7 rounded-full bg-white flex items-center justify-center text-xs font-bold shadow-sm ${rankColor}`}>
+        #{rank}
+      </div>
+      
+      <div className={`rounded-full p-1 bg-white mb-3 ${isFirst ? 'w-24 h-24' : 'w-20 h-20'} shadow-sm flex items-center justify-center`}>
+         <div className="w-full h-full rounded-full border-[3px] border-[#A87CFA] overflow-hidden">
+            <img src={avatarUrl} alt={participant.name} className="w-full h-full object-cover" />
+         </div>
+      </div>
+      
+      <h3 className="font-bold text-slate-900 text-[15px] mb-2 text-center w-full truncate px-2">
+        {participant.name}
+      </h3>
+      <div className="px-3 py-1 bg-[#DBCDF7]/80 rounded-full text-[#7B46F1] font-semibold text-[11px]">
+        {participant.points} points
+      </div>
+    </div>
+  );
 }

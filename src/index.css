@@ -2,6 +2,14 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@keyframes spinCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
 
 @theme {
   --color-google-blue: #4285F4;

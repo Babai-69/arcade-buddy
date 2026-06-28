@@ -62,12 +62,61 @@ export function Hero({ participants }: { participants: Participant[] }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-medium mb-8 shadow-sm">
-            <span className="flex h-2 w-2 rounded-full bg-[#34A853] animate-pulse"></span>
-            <span>Program Active</span>
-            <span className="text-slate-400 mx-2">|</span>
-            <span className="text-slate-700 dark:text-slate-300">13 Jul - 14 Sep 2026</span>
-          </div>
+          {!isLive && (
+            <div style={{
+              position: 'relative',
+              borderRadius: '999px',
+              padding: '2px',
+              display: 'inline-flex',
+              marginBottom: '24px'
+            }}>
+              <div style={{
+                position: 'absolute', inset: '-2px',
+                borderRadius: '999px', overflow: 'hidden'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  width: '200%', height: '200%',
+                  top: '-50%', left: '-50%',
+                  background: 'conic-gradient(from 0deg, transparent 0%, #4285F4 25%, #EA4335 50%, #FBBC05 75%, #34A853 100%)',
+                  animation: 'spinCW 3s linear infinite'
+                }}/>
+              </div>
+              <div 
+                className="bg-white dark:bg-[#0f1117]"
+                style={{
+                  position: 'relative',
+                  borderRadius: '999px',
+                  padding: '10px 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  zIndex: 1
+                }}
+              >
+                <span style={{
+                  width: '7px', height: '7px',
+                  borderRadius: '50%',
+                  background: '#34A853',
+                  display: 'inline-block',
+                  flexShrink: 0,
+                  animation: 'pulse 2.5s ease-in-out infinite'
+                }}/>
+                <span className="text-[13px] text-slate-800 dark:text-white/85 whitespace-nowrap">
+                  Arcade 2026 is starting soon — get ready!
+                </span>
+                <a href="/leaderboard" style={{
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  color: '#FBBC05',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap'
+                }}>
+                  Start tracking →
+                </a>
+              </div>
+            </div>
+          )}
           
           <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 text-slate-900 dark:text-white">
             Google Cloud <span className="text-gradient-google">Arcade Buddy</span>
@@ -102,22 +151,15 @@ export function Hero({ participants }: { participants: Participant[] }) {
             </a>
           </div>
 
-          <div className="max-w-4xl mx-auto bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 mb-8">
-            <div className="flex items-center gap-2 mb-6 justify-center">
-              <Clock className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-              <h4 className="font-bold font-display text-slate-800 dark:text-slate-200">
-                {isLive ? 'Facilitator Program Status:' : 'Facilitator Program Starts In:'}
-              </h4>
-            </div>
-
-            {isLive ? (
-              <div className="text-center py-4 bg-[#34A853]/10 border border-[#34A853]/20 rounded-xl">
-                 <span className="text-2xl font-bold text-[#34A853] flex items-center justify-center gap-2">
-                   <span className="w-3 h-3 rounded-full bg-[#34A853] animate-pulse"></span>
-                   PROGRAM IS LIVE
-                 </span>
+          {!isLive && (
+            <div className="max-w-4xl mx-auto bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 mb-8">
+              <div className="flex items-center gap-2 mb-6 justify-center">
+                <Clock className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+                <h4 className="font-bold font-display text-slate-800 dark:text-slate-200">
+                  Facilitator Program Starts In:
+                </h4>
               </div>
-            ) : (
+
               <div className="grid grid-cols-4 gap-4 text-center max-w-2xl mx-auto">
                 <div className="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700">
                   <div className="text-3xl lg:text-4xl font-bold font-display text-[#4285F4] mb-1">{timeLeft.days}</div>
@@ -136,8 +178,8 @@ export function Hero({ participants }: { participants: Participant[] }) {
                   <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 tracking-wider">SECONDS</div>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </motion.div>
 
         <motion.div

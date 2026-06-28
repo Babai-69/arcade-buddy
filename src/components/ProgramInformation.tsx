@@ -75,7 +75,7 @@ export function ProgramInformation() {
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 md:p-8 shadow-sm">
           <div className="flex items-center gap-2 mb-6 text-blue-600">
             <Calendar className="w-5 h-5 text-[#4285F4]" />
-            <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white">Important Program Dates</h3>
+            <h3 className="text-lg font-bold font-display text-slate-900 dark:text-white">Program Important Information</h3>
           </div>
           
           <div className="space-y-6">

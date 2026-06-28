@@ -4,7 +4,7 @@ import { FacilitatorCards } from '../components/FacilitatorCards';
 
 export function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#f8fbff] font-sans flex flex-col font-medium">
+    <div className="min-h-screen bg-white dark:bg-[#0f1117] font-sans flex flex-col font-medium">
       <div className="flex-grow flex flex-col items-center pt-24 pb-12 px-4 max-w-5xl mx-auto w-full">
         
         {/* Important Note */}
