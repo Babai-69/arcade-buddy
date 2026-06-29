@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, ExternalLink, Pin, RefreshCw } from 'lucide-react';
+import { Bell, ExternalLink, Pin, RefreshCw, X, CheckCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface Notification {
@@ -84,6 +84,34 @@ export function NavbarNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
   const [isFetching, setIsFetching] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const [readIds, setReadIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('readNotifications');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const markAsRead = (id: string) => {
+    setReadIds(prev => {
+      if (prev.includes(id)) return prev;
+      const newIds = [...prev, id];
+      localStorage.setItem('readNotifications', JSON.stringify(newIds));
+      return newIds;
+    });
+  };
+
+  const markAllAsRead = () => {
+    setReadIds(prev => {
+      const newIds = Array.from(new Set([...prev, ...notifications.map(n => n.id)]));
+      localStorage.setItem('readNotifications', JSON.stringify(newIds));
+      return newIds;
+    });
+  };
+
+  const unreadNotifications = notifications.filter(n => !readIds.includes(n.id));
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -152,16 +180,27 @@ export function NavbarNotifications() {
         aria-label="Notifications"
       >
         <Bell className="w-5 h-5" />
-        <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white dark:border-slate-950 rounded-full"></span>
+        {unreadNotifications.length > 0 && (
+          <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 border-2 border-white dark:border-slate-950 rounded-full"></span>
+        )}
       </button>
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-screen max-w-sm sm:max-w-md bg-[#1a1d27] border border-slate-700 shadow-2xl rounded-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
           <div className="p-4 border-b border-slate-700 flex items-center justify-between bg-[#1a1d27]">
             <h3 className="text-white font-bold text-lg flex items-center gap-2">
-              <Bell className="w-5 h-5 text-blue-400" /> Notifications ({notifications.length})
+              <Bell className="w-5 h-5 text-blue-400" /> Notifications ({unreadNotifications.length})
             </h3>
             <div className="flex items-center gap-2">
+              {unreadNotifications.length > 0 && (
+                <button
+                  onClick={markAllAsRead}
+                  className="p-1.5 text-slate-400 hover:text-white transition-colors"
+                  title="Mark all as read"
+                >
+                  <CheckCheck className="w-4 h-4" />
+                </button>
+              )}
               <button 
                 onClick={fetchLatestNotifications}
                 className="p-1.5 text-slate-400 hover:text-white transition-colors"
@@ -181,34 +220,49 @@ export function NavbarNotifications() {
           </div>
 
           <div className="max-h-[60vh] overflow-y-auto p-4 space-y-3 bg-[#11131a]">
-            {notifications.map((notif) => (
-              <div 
-                key={notif.id}
-                className={`p-4 rounded-xl border ${notif.pinned ? 'border-red-500/50 bg-[#1a1d27]' : 'border-slate-700 bg-[#1a1d27]'} flex flex-col gap-2`}
-              >
-                <div className="flex justify-between items-start gap-4">
-                  <h4 className="text-white font-bold text-sm leading-snug">{notif.title}</h4>
-                  {notif.pinned ? (
-                    <Pin className="w-4 h-4 text-red-500 shrink-0" />
-                  ) : notif.date ? (
-                    <span className="text-[10px] text-slate-400 whitespace-nowrap shrink-0 font-medium">{notif.date}</span>
-                  ) : null}
-                </div>
-                
-                <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">
-                  {notif.description}
-                </p>
-                
-                <a 
-                  href={notif.linkUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1 text-xs font-bold mt-1 ${notif.pinned ? 'bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md w-max' : 'text-blue-400 hover:text-blue-300 w-max'}`}
-                >
-                  {notif.linkText} <ExternalLink className="w-3 h-3" />
-                </a>
+            {unreadNotifications.length === 0 ? (
+              <div className="text-center py-8 text-slate-400 text-sm">
+                You're all caught up!
               </div>
-            ))}
+            ) : (
+              unreadNotifications.map((notif) => (
+                <div 
+                  key={notif.id}
+                  className={`p-4 rounded-xl border ${notif.pinned ? 'border-red-500/50 bg-[#1a1d27]' : 'border-slate-700 bg-[#1a1d27]'} flex flex-col gap-2`}
+                >
+                  <div className="flex justify-between items-start gap-4">
+                    <h4 className="text-white font-bold text-sm leading-snug">{notif.title}</h4>
+                    <div className="flex items-center gap-3">
+                      {notif.pinned ? (
+                        <Pin className="w-4 h-4 text-red-500 shrink-0" />
+                      ) : notif.date ? (
+                        <span className="text-[10px] text-slate-400 whitespace-nowrap shrink-0 font-medium">{notif.date}</span>
+                      ) : null}
+                      <button 
+                        onClick={() => markAsRead(notif.id)}
+                        className="text-slate-500 hover:text-white transition-colors shrink-0"
+                        title="Mark as read"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">
+                    {notif.description}
+                  </p>
+                  
+                  <a 
+                    href={notif.linkUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-1 text-xs font-bold mt-1 ${notif.pinned ? 'bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md w-max' : 'text-blue-400 hover:text-blue-300 w-max'}`}
+                  >
+                    {notif.linkText} <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}
