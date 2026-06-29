@@ -4,6 +4,20 @@ import { MessageCircle, Send, BookOpen, Star, HelpCircle, Gamepad2, Cloud, Shiel
 import footerLogo from '../../assets/images/regenerated_image_1782574219934.png';
 
 export function Footer() {
+  const buildDate = new Date(typeof __BUILD_TIME__ !== 'undefined' ? __BUILD_TIME__ : Date.now());
+  const formattedDate = new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'Asia/Kolkata',
+  }).format(buildDate);
+  const formattedTime = new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'Asia/Kolkata',
+  }).format(buildDate);
+
   return (
     <footer className="glass-card mt-24 border-t dark:border-slate-800 border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -16,6 +30,20 @@ export function Footer() {
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 max-w-sm">
               Master Cloud Skills. Earn Badges & Bonus Points. Unlock Exclusive Google Cloud Rewards through the Facilitator Program 2026.
             </p>
+            <div className="flex gap-4 mt-4">
+              <a href="https://www.instagram.com/dey_babai001/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-pink-600 transition-colors">
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a href="https://github.com/Arcade-With-Us/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">
+                <Github className="w-5 h-5" />
+              </a>
+              <a href="https://www.linkedin.com/in/abir-dey-a34914254/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-blue-600 transition-colors">
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a href="https://t.me/arcadebuddy" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-blue-400 transition-colors">
+                <Send className="w-5 h-5" />
+              </a>
+            </div>
           </div>
           <div>
             <h4 className="font-bold mb-4 font-display">Quick Links</h4>
@@ -52,7 +80,10 @@ export function Footer() {
         </div>
         <div className="border-t border-slate-200 dark:border-slate-800 mt-12 pt-8 flex flex-col items-center justify-between text-sm text-slate-500">
           <div className="flex flex-col md:flex-row justify-between items-center w-full mb-4 md:mb-0 gap-4">
-            <p>© 2026 Facilitator Program Portal. Unofficial community dashboard.</p>
+            <div className="flex flex-col gap-1 text-center md:text-left">
+              <p>© 2026 Arcade. All rights reserved.</p>
+              <p className="text-xs text-slate-400">Last Updated: {formattedDate} at {formattedTime} IST</p>
+            </div>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-medium">
               <Link to="/privacy" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">Privacy</Link>
               <Link to="/terms" className="hover:text-slate-900 dark:hover:text-slate-200 transition-colors">Terms</Link>
@@ -63,20 +94,6 @@ export function Footer() {
           <p className="mt-6 md:mt-4 font-medium text-center w-full border-t border-slate-200 dark:border-slate-800 pt-6">
             Made with ❤️ by <a href="https://www.linkedin.com/in/abir-dey-a34914254/" target="_blank" rel="noopener noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-[#4285F4] transition-colors underline decoration-slate-300 dark:decoration-slate-600 underline-offset-4">Abir Dey</a>
           </p>
-          <div className="flex justify-center gap-6 mt-4 w-full">
-            <a href="https://www.instagram.com/dey_babai001/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a href="https://github.com/Arcade-With-Us/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
-              <Github className="w-5 h-5" />
-            </a>
-            <a href="https://www.linkedin.com/in/abir-dey-a34914254/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://t.me/arcadebuddy" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
-              <Send className="w-5 h-5" />
-            </a>
-          </div>
         </div>
       </div>
     </footer>

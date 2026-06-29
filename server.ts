@@ -392,6 +392,37 @@ async function startServer() {
     }
   });
 
+  app.get("/api/active-games", async (req, res) => {
+    try {
+      const response = await fetch("https://go.cloudskillsboost.google/arcade");
+      let html = await response.text();
+      html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+      const $ = cheerio.load(html);
+
+      const games: any[] = [];
+      $('.card').each((i, el) => {
+        const link = $(el).find('a').attr('href');
+        const img = $(el).find('img').attr('src');
+        if (link && link.includes('skills.google/games/') && img) {
+           let title = "Arcade Game";
+           if (img.includes('bc')) title = "Arcade Base Camp";
+           else if (img.includes('adv')) title = "Arcade Adventure";
+           else if (img.includes('voy')) title = "Arcade Voyage";
+           else if (img.includes('trail')) title = "Arcade Trail";
+           else if (img.includes('work')) title = "Cloud Canvas / Work Meets Play";
+           else if (img.includes('logic')) title = "Logic Log / Special Game";
+           
+           games.push({ link, img, title });
+        }
+      });
+
+      res.json({ games });
+    } catch (e) {
+      console.error(e);
+      res.status(500).json({ error: "Failed to fetch active games" });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
