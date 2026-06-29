@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, Send, BookOpen, Star, HelpCircle, Gamepad2, Cloud, Shield } from 'lucide-react';
+import { MessageCircle, Send, BookOpen, Star, HelpCircle, Gamepad2, Cloud, Shield, Instagram, Github, Linkedin } from 'lucide-react';
 import footerLogo from '../../assets/images/regenerated_image_1782574219934.png';
 
 export function Footer() {
@@ -63,6 +63,20 @@ export function Footer() {
           <p className="mt-6 md:mt-4 font-medium text-center w-full border-t border-slate-200 dark:border-slate-800 pt-6">
             Made with ❤️ by <a href="https://www.linkedin.com/in/abir-dey-a34914254/" target="_blank" rel="noopener noreferrer" className="text-slate-700 dark:text-slate-300 hover:text-[#4285F4] transition-colors underline decoration-slate-300 dark:decoration-slate-600 underline-offset-4">Abir Dey</a>
           </p>
+          <div className="flex justify-center gap-6 mt-4 w-full">
+            <a href="https://www.instagram.com/dey_babai001/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href="https://github.com/Arcade-With-Us/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+              <Github className="w-5 h-5" />
+            </a>
+            <a href="https://www.linkedin.com/in/abir-dey-a34914254/" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+              <Linkedin className="w-5 h-5" />
+            </a>
+            <a href="https://t.me/arcadebuddy" target="_blank" rel="noopener noreferrer" className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors">
+              <Send className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

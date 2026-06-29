@@ -18,8 +18,8 @@ export function Hero({ participants }: { participants: Participant[] }) {
   const [timerState, setTimerState] = useState<'upcoming' | 'live' | 'ended'>('upcoming');
 
   useEffect(() => {
-    // Target date: July 13, 2026 17:00:00 GMT+0530 (IST) -> 11:30:00Z
-    const startDate = new Date('2026-07-13T11:30:00Z').getTime();
+    // Target date: July 13, 2026 17:30:00 GMT+0530 (IST) -> 12:00:00Z
+    const startDate = new Date('2026-07-13T12:00:00Z').getTime();
     // End date: September 14, 2026 23:59:00 GMT+0530 (IST) -> 18:29:00Z
     const endDate = new Date('2026-09-14T18:29:00Z').getTime();
 
@@ -58,36 +58,21 @@ export function Hero({ participants }: { participants: Participant[] }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {timerState === 'upcoming' && (
+          {(timerState === 'upcoming' || timerState === 'live') && (
             <div style={{
-              position: 'relative',
               borderRadius: '999px',
               padding: '2px',
               display: 'inline-flex',
               marginBottom: '24px'
             }}>
-              <div style={{
-                position: 'absolute', inset: '-2px',
-                borderRadius: '999px', overflow: 'hidden'
-              }}>
-                <div style={{
-                  position: 'absolute',
-                  width: '200%', height: '200%',
-                  top: '-50%', left: '-50%',
-                  background: 'conic-gradient(#4285F4, #34A853, #FBBC05, #EA4335, #7c3aed, #4285F4)',
-                  animation: 'spinCW 3s linear infinite'
-                }}/>
-              </div>
               <div 
-                className="bg-white dark:bg-[#0f1117]"
+                className="bg-white dark:bg-[#0f1117] border border-slate-200 dark:border-slate-800"
                 style={{
-                  position: 'relative',
                   borderRadius: '999px',
                   padding: '10px 20px',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  zIndex: 1
+                  gap: '10px'
                 }}
               >
                 <span style={{
@@ -99,17 +84,10 @@ export function Hero({ participants }: { participants: Participant[] }) {
                   animation: 'pulse 2.5s ease-in-out infinite'
                 }}/>
                 <span className="text-[13px] text-slate-800 dark:text-white/85 whitespace-nowrap">
-                  Arcade 2026 is starting soon — get ready!
+                  {timerState === 'upcoming' 
+                    ? 'Arcade 2026 is starting soon — get ready!' 
+                    : 'Arcade 2026 is now live — start playing!'}
                 </span>
-                <a href="/leaderboard" style={{
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  color: '#FBBC05',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}>
-                  Start tracking →
-                </a>
               </div>
             </div>
           )}
