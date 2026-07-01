@@ -14,12 +14,8 @@ export function UserProgressDashboard() {
   
   const { activeGames } = useArcadeGames();
   
-  // Load saved profile URL if any
   useEffect(() => {
-    const savedUrl = localStorage.getItem('arcadeProfileUrl');
-    if (savedUrl) {
-      setProfileUrl(savedUrl);
-    }
+    // Left intentionally blank as requested
   }, []);
 
   const fetchProgress = async (e?: React.FormEvent) => {
@@ -37,7 +33,6 @@ export function UserProgressDashboard() {
       if (result.error) throw new Error(result.error);
       
       setData(result);
-      localStorage.setItem('arcadeProfileUrl', profileUrl);
     } catch (err: any) {
       setError(err.message || 'Error fetching progress');
     } finally {
@@ -135,7 +130,7 @@ export function UserProgressDashboard() {
                 type="url"
                 value={profileUrl}
                 onChange={(e) => setProfileUrl(e.target.value)}
-                placeholder="https://www.cloudskillsboost.google/public_profiles/..."
+                placeholder="https://www.skills.google/public_profiles/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-900 dark:text-white"
                 required
               />
