@@ -88,32 +88,27 @@ async function startServer() {
     };
 
     try {
-      const response = await fetch('https://arcadepointscalci.in/calculator', {
-        headers: {
-          'User-Agent': 'Mozilla/5.0',
-          'Accept': 'text/html'
-        }
-      });
-      const html = await response.text();
-      
-      const jsMatch = html.match(/src="(\/assets\/index-[^"]+\.js)"/);
-      let jsContent = '';
-      if (jsMatch) {
-        const jsRes = await fetch(`https://arcadepointscalci.in${jsMatch[1]}`);
-        jsContent = await jsRes.text();
-      }
+      const response = await fetch('https://go.cloudskillsboost.google/arcade');
+      let html = await response.text();
+      html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"');
+      const $ = cheerio.load(html);
       
       const extractSpots = (name: string, fallback: any) => {
-        if (!jsContent) return fallback;
-        const regex = new RegExp(`"${name}".{0,30}?"(\\d+)\\s*/\\s*(\\d+)\\s*spots? left"`, 'i');
-        const match = jsContent.match(regex);
-        if (match) {
-          return {
-            spotsLeft: parseInt(match[1].replace(/,/g, ''), 10),
-            total: parseInt(match[2].replace(/,/g, ''), 10)
-          };
-        }
-        return fallback;
+        let spotsInfo = fallback;
+        $(".tier-card").each((i, el) => {
+           const title = $(el).find(".tier-header .tier-card-title").text().trim();
+           if (title.toLowerCase().includes(name.toLowerCase())) {
+             const spotsText = $(el).find(".tier-points").text().trim();
+             const match = spotsText.match(/(\d+)\s*\/\s*(\d+)/);
+             if (match) {
+               spotsInfo = {
+                 spotsLeft: parseInt(match[1].replace(/,/g, ''), 10),
+                 total: parseInt(match[2].replace(/,/g, ''), 10)
+               };
+             }
+           }
+        });
+        return spotsInfo;
       };
 
       const trooper = extractSpots("Trooper", fallbackData.trooper);
